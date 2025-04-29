@@ -1,0 +1,17 @@
+services:
+  visual-chatbot:
+    image: mikesir87/visual-chatbot
+    ports:
+      - "3000:3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    tty: true
+    stdin_open: true
+    depends_on:
+      - ai-runner
+
+  ai-runner:
+    provider:
+      type: model
+      options:
+        model: ai/gemma3:1B-Q4_K_M
