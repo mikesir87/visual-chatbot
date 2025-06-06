@@ -137,7 +137,7 @@ export const McpCollectionDisplay = () => {
               </div>
             )}
 
-            { !mcpServers.some(mcp => mcp.name === "dd-gateway") && (
+            { /* !mcpServers.some(mcp => mcp.name === "dd-gateway") && (
               <div className="mb-3">
                 <Button variant="secondary" onClick={addDockerDesktopMcpGateway} disabled={addingDockerDesktopMcpGateway}>
                   { addingDockerDesktopMcpGateway ? (
@@ -149,7 +149,7 @@ export const McpCollectionDisplay = () => {
                   )}
                 </Button>  
               </div>
-            )}
+            ) */ }
 
             <div>
               <Button 
