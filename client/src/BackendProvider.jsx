@@ -219,6 +219,11 @@ export const BackendContextProvider = ({ children }) => {
     });
   }, []);
 
+  const restartMcpServer = useCallback(async (mcpServer) => {
+    await removeMcpServer(mcpServer);
+    await addMcpServer(mcpServer);
+  }, [removeMcpServer, addMcpServer]);
+
   return (
     <BackendContext.Provider value={{ 
       config,
@@ -243,6 +248,7 @@ export const BackendContextProvider = ({ children }) => {
       mcpServers,
       addMcpServer,
       removeMcpServer,
+      restartMcpServer,
 
       personas,
       

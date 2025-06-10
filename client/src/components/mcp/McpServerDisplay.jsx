@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import { useBackend } from "../../BackendProvider";
 
 export const McpServerDisplay = ({ mcpServer }) => {
-  const { removeMcpServer } = useBackend();
+  const { removeMcpServer, restartMcpServer } = useBackend();
 
   const onRemove = () => {
     if (confirm(`Are you sure you want to remove MCP server ${mcpServer.name}?\n\nThis will remove all tools associated with this server.`)) {
@@ -10,6 +10,11 @@ export const McpServerDisplay = ({ mcpServer }) => {
     }
   }
 
+  const onRestart = () => {
+    if (confirm(`Are you sure you want to restart MCP server ${mcpServer.name}?`)) {
+      restartMcpServer(mcpServer);
+    }
+  }
 
   return (
     <div className="bg-light mb-3 d-flex">
@@ -18,7 +23,9 @@ export const McpServerDisplay = ({ mcpServer }) => {
         { mcpServer.command.startsWith("http") ? "HTTP Endpoint:" : "Command:" } <code>{ mcpServer.command } { mcpServer.args.join(" ") }</code>
       </div>
       <div className="p-3">
-        <Button variant="light" onClick={onRemove}>X</Button>
+        <Button variant="light" onClick={onRemove}>🗑️</Button>
+        <br />
+        <Button variant="light" onClick={onRestart}>🔄</Button>
       </div>
     </div>
   );
