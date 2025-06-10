@@ -89,8 +89,14 @@ app.post("/api/messages", async (req, res) => {
     ].join("\n");
   }
 
-  await llmClient.sendMessage(message);
-  res.json({ status: 'ok' });
+  try {
+    await llmClient.sendMessage(message);
+    res.json({ status: 'ok' });
+  } catch (e) {
+    console.error("Error sending message", e);
+    res.status(500).json({ status: 'error', message: "Unable to send message. " + e.message });
+    return;
+  }
 });
 
 app.delete("/api/messages", (req, res) => {

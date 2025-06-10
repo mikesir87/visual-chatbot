@@ -89,9 +89,9 @@ export class LlmClient {
     const response = await fetch(this.config.endpoint, requestOptions);
 
     if (response.status !== 200) {
-      const body = await response.text();
+      const body = await response.json();
       console.error("Request failed", response.status, body, response);
-      throw new Error(`Request failed with status ${response.status}`, response, body);
+      throw new Error(`Request failed with status ${response.status} - ${body?.error?.message}`);
     }
 
     const body = await response.json();
