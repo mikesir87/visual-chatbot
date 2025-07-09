@@ -6,10 +6,9 @@ export class Configuration {
    * Create a new config object
    */
   constructor(apiKey, systemPrompt, model, endpoint) {
-    this.apiKey = apiKey;
-    this.systemPrompt = systemPrompt;
-    this.model = model;
-    this.endpoint = endpoint;
+    this.apiKey = apiKey || process.env.OPENAI_API_KEY;
+    this.model = model || process.env.OPENAI_MODEL;
+    this.endpoint = endpoint || process.env.OPENAI_BASE_URL;
 
     this.systemPrompt = fs.readFileSync("./src/personas/1-whimsical.txt", "utf-8")
       .split("\n").filter((l, i) => i > 0).join("\n");
