@@ -9,7 +9,7 @@ export class Configuration {
     this.apiKey = apiKey || process.env.OPENAI_API_KEY;
     this.model = model || process.env.OPENAI_MODEL;
     this.endpoint = process.env.OPENAI_BASE_URL ?
-      endpoint : `${process.env.OPENAI_BASE_URL}/chat/completions`;
+      `${process.env.OPENAI_BASE_URL}/chat/completions` : endpoint;
 
     this.systemPrompt = fs.readFileSync("./src/personas/1-whimsical.txt", "utf-8")
       .split("\n").filter((l, i) => i > 0).join("\n");
