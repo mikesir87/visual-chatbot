@@ -18,7 +18,7 @@ export const SettingsDropdown = () => {
 
   return (
     <>
-      <NavDropdown title="Settings" id="settings-dropdown">
+      <NavDropdown title="Settings" id="settings-dropdown" align="end">
         <NavDropdown.Item onClick={() => setShowLlmConfigModal(true)} href="#">LLM backend</NavDropdown.Item>
         <NavDropdown.Item onClick={() => setSystemPromptModal(true)} href="#">System prompt</NavDropdown.Item>
         <NavDropdown.Item onClick={() => setShowAiToolGenerationModal(true)} href="#">AI tool generation</NavDropdown.Item>
