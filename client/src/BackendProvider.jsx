@@ -121,7 +121,7 @@ export const BackendContextProvider = ({ children }) => {
     return () => socket.disconnect();
   }, [setConnected, setMessages, setTools]);
 
-  const sendMessage = useCallback(async (message) => {
+  const addMessage = useCallback(async (message) => {
     setLoading(true);
     try {
       await makeRequest("/api/messages", {
@@ -135,6 +135,26 @@ export const BackendContextProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
+
+  const sendMessages = useCallback(async () => {
+    setLoading(true);
+    try {
+      await makeRequest("/api/messages/send", {
+        method: "POST",
+      });
+    } finally {   
+      setLoading(false);
+  }}, [setLoading]);
+
+  const invokeTools = useCallback(async () => {
+    setLoading(true);
+    try {
+      await makeRequest("/api/messages/invoke-tools", {
+        method: "POST",
+      });
+    } finally {   
+      setLoading(false);
+  }}, [setLoading]);
 
   const resetMessages = useCallback(async () => {
     await makeRequest("/api/messages", {
@@ -234,9 +254,12 @@ export const BackendContextProvider = ({ children }) => {
       loading,
 
       messages,
-      sendMessage,
+      addMessage,
       deleteMessage,
       resetMessages,
+      
+      sendMessages,
+      invokeTools,
 
       tools,
       addTool,

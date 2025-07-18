@@ -3,7 +3,7 @@ import { SyntaxHighlighterDisplay } from "./SyntaxHighlighterDisplay";
 import Button from "react-bootstrap/Button";
 
 export function MessageBlock({ children, language = "plaintext" }) {
-  const { sendMessage } = useBackend();
+  const { addMessage } = useBackend();
 
   return (
     <div className="message-block mb-3">
@@ -16,7 +16,7 @@ export function MessageBlock({ children, language = "plaintext" }) {
       <Button
         size="sm"
         variant="primary"
-        onClick={() => sendMessage(String(children).replace(/\n$/, ''))}
+        onClick={() => addMessage(String(children).replace(/\n$/, ''))}
       >
         Add user message
       </Button>

@@ -6,7 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { SettingOptions } from "./SettingOptionCard";
 
 export const SystemPromptModal = ({ show, onClose }) => {
-  const { config, updateConfiguration, resetMessages, sendMessage, messages, personas } = useBackend();
+  const { config, updateConfiguration, resetMessages, addMessage, sendMessages, messages, personas, invokeTools } = useBackend();
   const [systemPrompt, setSystemPrompt] = useState(config.systemPrompt);
   const [replayMessages, setReplayMessages] = useState(false);
   const [savedMessages, setSavedMessages] = useState(messages);
@@ -32,7 +32,9 @@ export const SystemPromptModal = ({ show, onClose }) => {
     onClose();
     if (replayMessages) {
       for (const message of savedMessages.filter(m => m.role === "user")) {
-        await sendMessage(message.content);
+        await addMessage(message.content);
+        await sendMessages();
+        await invokeTools();
       }
     }
 

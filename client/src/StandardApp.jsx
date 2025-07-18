@@ -1,5 +1,4 @@
 import './App.scss'
-import { MessageInput } from './components/chat/MessageInput';
 import { ChatThreadDisplay } from './components/chat/ChatThreadDisplay';
 import { ChatbotSidebar } from './components/ChatbotSidebar';
 import { Header } from './components/Header';
@@ -18,11 +17,6 @@ function StandardApp() {
           <div className="w-25 p-3 overflow-auto bg-light">
             <ChatbotSidebar />
           </div>
-        </div>
-
-
-        <div className="p-3 bg-light pe-5 ps-5 border-top">
-          <MessageInput />
         </div>
       </div>
     </>

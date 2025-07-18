@@ -6,8 +6,12 @@ import Spinner from "react-bootstrap/Spinner";
 import TextareaAutoresize from "react-textarea-autosize";
 import { useBackend } from "../../BackendProvider";
 
-export const MessageInput = () => {
-  const { sendMessage, resetMessages, loading } = useBackend();
+export const MessageInput = ({ 
+  showReset = true, 
+  onMessageSubmission = () => {},
+  onCancel = () => {} 
+}) => {
+  const { addMessage, resetMessages, loading } = useBackend();
   const [input, setInput] = useState("");
   const submitButtonRef = useRef();
 
@@ -15,8 +19,9 @@ export const MessageInput = () => {
     <Form onSubmit={(e) => {
       e.preventDefault();
       if (input) {
-        sendMessage(input);
+        addMessage(input);
         setInput("");
+        onMessageSubmission();
       }
     }}>
       <InputGroup>
@@ -25,6 +30,7 @@ export const MessageInput = () => {
           maxRows={3}
           minRows={1}
           value={input} 
+          autoFocus
           placeholder="Type your user message content..."
           onChange={(e) => setInput(e.target.value)} 
           onKeyDown={(e) => {
@@ -39,9 +45,11 @@ export const MessageInput = () => {
             <Spinner animation="border" size="sm" role="status">
               <span className="visually-hidden">Loading...</span>
             </Spinner>
-          ) : "Add message" }
+          ) : "Add user message" }
         </Button>
-        <Button type="button" variant="danger" onClick={resetMessages}>Reset messages</Button>
+        <Button variant="secondary" onClick={() => onCancel()}>
+          Cancel
+        </Button>
       </InputGroup>
     </Form>
   )

@@ -4,7 +4,6 @@ import Col from "react-bootstrap/Col";
 import ReactMarkdown from 'react-markdown'
 
 export const ChatMessageDisplay = ({ message, onSelect }) => {
-  const [expanded, setExpanded] = useState(false);
   const ref = useRef();
 
   const isWrittenMessage = message.role === "user" || (message.role === "assistant" && !message.tool_calls);
@@ -38,7 +37,7 @@ export const ChatMessageDisplay = ({ message, onSelect }) => {
     >
       <Col
         ref={ref}
-        sm={expanded ? 12 : 8}
+        sm={8}
         className={"text-wrap text-break " + messageClasses.join(" ")}
         onClick={onSelect}
       >

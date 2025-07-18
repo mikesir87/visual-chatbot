@@ -31,7 +31,6 @@ export function MessageSidebar() {
           <ChatThreadDisplay 
             MessageComponent={MessageDisplay}
           />
-          <MessageInput />
         </div>
       </Tab>
       <Tab eventKey="tools" title={`Tools (${tools.length})`}>

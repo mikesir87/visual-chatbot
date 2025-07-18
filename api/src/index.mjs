@@ -89,9 +89,29 @@ app.post("/api/messages", async (req, res) => {
     ].join("\n");
   }
 
+  messageStore.addMessage({
+    role: "user",
+    content: message,
+  });
+ 
+  res.json({ status: 'ok' });
+ });
+
+app.post("/api/messages/send", async (req, res) => {
   try {
-    await llmClient.sendMessage(message);
-    res.json({ status: 'ok' });
+    const response = await llmClient.sendMessage();
+    res.json({ status: 'ok', message: response });
+  } catch (e) {
+    console.error("Error sending message", e);
+    res.status(500).json({ status: 'error', message: "Unable to send message. " + e.message });
+    return;
+  }
+});
+
+app.post("/api/messages/invoke-tools", async (req, res) => {
+  try {
+    const newMessages = await llmClient.invokeTools();
+    res.json({ status: 'ok', messages: newMessages });
   } catch (e) {
     console.error("Error sending message", e);
     res.status(500).json({ status: 'error', message: "Unable to send message. " + e.message });

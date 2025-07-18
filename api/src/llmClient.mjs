@@ -23,39 +23,36 @@ export class LlmClient {
     })
   }
   
-  async sendMessage(messageContent) {
-    const message = {
-      role: "user",
-      content: messageContent,
-    };
+  async sendMessage() {
+    return await this.#sendRequest();
+  }
 
-    this.messageStore.addMessage(message);
+  async invokeTools() {
+    const newMessages = [];
+    const lastMessage = this.messageStore.getMessages().slice(-1)[0];
+    for (const toolCall of lastMessage.tool_calls) {
+      try {
+        const tool = this.toolStore.getTools().find(t => t.name === toolCall.function.name);
+        const result = await tool.execute(JSON.parse(toolCall.function.arguments));
 
-    let count = 0;
-    while (count++ < 15) {
-      const response = await this.#sendRequest();
-      if (!response.tool_calls)
-        break;
+        const message = {
+          role: "tool",
+          content: new String(result),
+          tool_call_id: toolCall.id,
+        };
 
-      for (const toolCall of response.tool_calls) {
-        try {
-          const tool = this.toolStore.getTools().find(t => t.name === toolCall.function.name);
-          const result = await tool.execute(JSON.parse(toolCall.function.arguments));
-
-          this.messageStore.addMessage({
-            role: "tool",
-            content: new String(result),
-            tool_call_id: toolCall.id,
-          });
-        } catch (e) {
-          console.error("Error executing tool", e);
-          this.messageStore.addMessage({
-            role: "system",
-            content: "Error executing tool",
-          });
-        }
+        this.messageStore.addMessage(message);
+        newMessages.push(message);
+      } catch (e) {
+        console.error("Error executing tool", e);
+        this.messageStore.addMessage({
+          role: "system",
+          content: "Error executing tool",
+        });
       }
     }
+    
+    return newMessages;
   }
 
   async #sendRequest() {

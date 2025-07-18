@@ -3,6 +3,7 @@ import { useBackend } from "../../BackendProvider";
 import { ChatMessageDisplay } from "./ChatMessageDisplay";
 import { useCallback, useState } from "react";
 import { MessageDetailsDialog } from "./MessageDetailsDialog";
+import { ChatThreadActions } from "./ChatThreadActions";
 
 export const ChatThreadDisplay = ({
   MessageComponent = ChatMessageDisplay,
@@ -28,6 +29,8 @@ export const ChatThreadDisplay = ({
             onSelect={() => handleSelectMessage(index)}
           />
         ))}
+
+        <ChatThreadActions />
       </Container>
 
       <MessageDetailsDialog
