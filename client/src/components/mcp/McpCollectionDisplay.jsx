@@ -11,8 +11,6 @@ import { useCallback, useState } from "react";
 export const McpCollectionDisplay = () => {
   const { mcpServers, addMcpServer } = useBackend();
   const [addingWeatherServer, setAddingWeatherServer] = useState(false);
-  const [addingSqliteServer, setAddingSqliteServer] = useState(false);
-  const [addingDockerDesktopMcpGatewayExtension, setAddingDockerDesktopMcpGatewayExtension] = useState(false);
   const [addingDockerDesktopMcpGateway, setAddingDockerDesktopMcpGateway] = useState(false);
   const [showAddMcpServerDialog, setShowAddMcpServerDialog] = useState(false);
 
@@ -28,35 +26,11 @@ export const McpCollectionDisplay = () => {
       .finally(() => setAddingWeatherServer(false));
   }, [addMcpServer]);
 
-  const addSqliteDemoServer = useCallback(() => {
-    const mcpServer = {
-      name: "database",
-      command: "docker",
-      args: ["run", "--rm", "-i", "mikesir87/mcp-sqlite-demo"],
-    };
-
-    setAddingSqliteServer(true);
-    addMcpServer(mcpServer)
-      .finally(() => setAddingSqliteServer(false));
-  }, [addMcpServer]);
-
-  const addDockerDesktopMcpGatewayExtension = useCallback(() => {
-    const mcpServer = {
-      name: "dd-gateway-ext",
-      command: "docker",
-      args: ["run", "--rm", "-i", "alpine/socat", "STDIO", "TCP:host.docker.internal:8811"],
-    };
-
-    setAddingDockerDesktopMcpGatewayExtension(true);
-    addMcpServer(mcpServer)
-      .finally(() => setAddingDockerDesktopMcpGatewayExtension(false));
-  }, [addMcpServer]);
-
   const addDockerDesktopMcpGateway = useCallback(() => {
     const mcpServer = {
       name: "dd-gateway",
       command: "docker",
-      args: ["mcp", "gateway", "run"],
+      args: ["run", "--rm", "-i", "--use-api-socket", "docker/mcp-gateway", "--transport=stdio", "--servers=duckduckgo", "--port=0"],
     };
 
     setAddingDockerDesktopMcpGateway(true);
@@ -96,6 +70,7 @@ export const McpCollectionDisplay = () => {
 
         <Row>
           <Col>
+
             { !mcpServers.some(mcp => mcp.name === "weather") && (
               <div className="mb-3">
                 <Button variant="secondary" onClick={addWeatherServer} disabled={addingWeatherServer}>
@@ -104,34 +79,7 @@ export const McpCollectionDisplay = () => {
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
                   ) : (
-                    "+ Add weather server (local)"
-                  )}
-                </Button>  
-              </div>
-            )}
-            { !mcpServers.some(mcp => mcp.name === "database") && (
-              <div className="mb-3">
-                <Button variant="secondary" onClick={addSqliteDemoServer} disabled={addingSqliteServer}>
-                  { addingSqliteServer ? (
-                    <Spinner animation="border" size="sm" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                  ) : (
-                    "+ Add sqlite server (Docker)"
-                  )}
-                </Button>  
-              </div>
-            )}
-
-            { !mcpServers.some(mcp => mcp.name === "dd-gateway-ext") && (
-              <div className="mb-3">
-                <Button variant="secondary" onClick={addDockerDesktopMcpGatewayExtension} disabled={addingDockerDesktopMcpGatewayExtension}>
-                  { addingDockerDesktopMcpGatewayExtension ? (
-                    <Spinner animation="border" size="sm" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                  ) : (
-                    "+ Add Docker MCP Gateway (extension)"
+                    "+ Start weather MCP server (local)"
                   )}
                 </Button>  
               </div>
@@ -145,7 +93,7 @@ export const McpCollectionDisplay = () => {
                       <span className="visually-hidden">Loading...</span>
                     </Spinner>
                   ) : (
-                    "+ Add Docker MCP Gateway (native)"
+                    "+ Add DuckDuckGo (via Docker MCP Gateway)"
                   )}
                 </Button>  
               </div>

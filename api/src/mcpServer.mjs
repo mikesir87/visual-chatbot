@@ -10,6 +10,8 @@ export class McpServer {
     this.command = command;
     this.args = args;
     this.onNewToolListing = (tools) => {};
+    this.tools = [];
+    this.hasFetchedTools = false;
 
     this.client = new Client({
       name: "visual-chatbot",
@@ -44,11 +46,11 @@ export class McpServer {
       console.log(`Received a notification for a new tool listing for MCP server ${this.name}`);
       this.updateToolListing();
     }.bind(this));
-
-    await this.updateToolListing();
   }
 
   async updateToolListing() {
+    this.hasFetchedTools = true;
+
     const { tools: availableTools } = await this.client.listTools();
 
     const self = this;
@@ -100,7 +102,8 @@ export class McpServer {
       name: this.name,
       command: this.command,
       args: this.args,
-      tools: this.tools.map(tool => ({ name: tool.name, description: tool.description })),
+      hasFetchedTools: this.hasFetchedTools,
+      tools: this.hasFetchedTools ? this.tools.map(tool => ({ name: tool.name, description: tool.description })) : [],
     };
   }
 }

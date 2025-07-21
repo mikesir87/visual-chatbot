@@ -244,6 +244,12 @@ export const BackendContextProvider = ({ children }) => {
     await addMcpServer(mcpServer);
   }, [removeMcpServer, addMcpServer]);
 
+  const fetchTools = useCallback(async (mcpServerName) => {
+    await makeRequest(`/api/mcp-servers/${mcpServerName}/tools`, {
+      method: "POST",
+    });
+  }, []);
+
   return (
     <BackendContext.Provider value={{ 
       config,
@@ -272,6 +278,7 @@ export const BackendContextProvider = ({ children }) => {
       addMcpServer,
       removeMcpServer,
       restartMcpServer,
+      fetchTools,
 
       personas,
       

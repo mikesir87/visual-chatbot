@@ -156,6 +156,15 @@ app.delete("/api/mcp-servers", async (req, res) => {
   res.json({ status: 'ok' });
 });
 
+app.post("/api/mcp-servers/:serverName/tools", async (req, res) => {
+  const mcpServer = mcpServerStore.getMcpServers().find(s => s.name === req.params.serverName);
+  if (!mcpServer) {
+    res.status(404).json({ status: 'error', message: 'MCP server not found' });
+    return;
+  }
+  await mcpServer.updateToolListing();
+  res.json({ status: 'ok' });
+});
 
 app.post("/api/ai-tool-creation", async (req, res) => {
   const tool = new Tool(
