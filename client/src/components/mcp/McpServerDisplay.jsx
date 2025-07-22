@@ -42,7 +42,7 @@ export const McpServerDisplay = ({ mcpServer }) => {
 
       </div>
       <div className="p-3">
-        <Button size="sm" variant="light" onClick={onFetchTools} disabled={isFetchingTools}>
+        <Button size="sm" variant={mcpServer.hasFetchedTools ? "light" : "outline-primary"} onClick={onFetchTools} disabled={isFetchingTools}>
           { isFetchingTools ? (
             <Spinner animation="border" size="sm" role="status" />
           ) : (
