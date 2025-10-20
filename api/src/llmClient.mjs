@@ -30,6 +30,11 @@ export class LlmClient {
   async invokeTools() {
     const newMessages = [];
     const lastMessage = this.messageStore.getMessages().slice(-1)[0];
+
+    if (!lastMessage.tool_calls || lastMessage.tool_calls.length === 0) {
+      return newMessages;
+    }
+
     for (const toolCall of lastMessage.tool_calls) {
       try {
         const tool = this.toolStore.getTools().find(t => t.name === toolCall.function.name);
